@@ -3,204 +3,703 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ครัวเคลิ้ม - 5 เมนูใหม่ & เกมปรุงอาหาร</title>
-    <!-- Tailwind CSS CDN -->
+    <title>คลังเมนูพิศวง & มินิเกมทายรสประหลาด</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Prompt & Kanit) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'Kanit', 'sans-serif'],
+                    },
+                    colors: {
+                        neon: {
+                            purple: '#a855f7',
+                            pink: '#ec4899',
+                            lime: '#84cc16',
+                            yellow: '#eab308',
+                            cyan: '#06b6d4'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Kanit', sans-serif; }
+        body {
+            font-family: 'Prompt', sans-serif;
+            background: radial-gradient(circle at top, #1e1b4b 0%, #0f172a 60%, #020617 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card-hover {
+            transition: all 0.3s ease;
+        }
+        .glass-card-hover:hover {
+            transform: translateY(-4px);
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.2);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.5);
+            border-radius: 8px;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(236, 72, 153, 0.6)); }
+            50% { filter: drop-shadow(0 0 22px rgba(168, 85, 247, 0.9)); }
+        }
+        .glow-animation {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
     </style>
 </head>
-<body class="bg-amber-50 text-slate-800 min-h-screen">
+<body class="flex flex-col min-h-screen text-slate-100 overflow-x-hidden">
 
-    <!-- Header / Navbar -->
-    <header class="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-2xl md:text-3xl font-bold tracking-wide">🍳 ครัวเคลิ้ม (Khrua Khloem)</h1>
-            <nav class="space-x-2">
-                <button onclick="switchTab('menu')" id="btn-menu" class="px-4 py-2 bg-amber-900 bg-opacity-40 hover:bg-opacity-70 rounded-full font-semibold transition">📋 เมนูใหม่</button>
-                <button onclick="switchTab('game')" id="btn-game" class="px-4 py-2 bg-amber-900 bg-opacity-40 hover:bg-opacity-70 rounded-full font-semibold transition">🎮 เกมเชฟเคลิ้ม</button>
-            </nav>
+    <header class="w-full glass-card sticky top-0 z-50 px-4 py-3 border-b border-purple-500/20 shadow-xl">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-xl text-white shadow-lg glow-animation">
+                    <i class="fa-solid fa-utensils"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-400 via-purple-300 to-yellow-300">
+                        Bizarre Gourmet & Mini Arcade
+                    </h1>
+                    <p class="text-xs text-purple-300/80">ศูนย์รวมเมนูพิศวง & มินิเกมแยกเฉพาะ</p>
+                </div>
+            </div>
+
+            <!-- Header Mode Switcher Tabs -->
+            <div class="flex bg-slate-900/80 p-1 rounded-xl border border-slate-700/60 shadow-inner">
+                <button id="nav-menu-btn" onclick="switchMode('menus')" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md">
+                    <i class="fa-solid fa-book-open"></i> 1. คลังเมนูพิศวง
+                </button>
+                <button id="nav-game-btn" onclick="switchMode('game')" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-gamepad"></i> 2. เกมทายรสประหลาด
+                </button>
+                <button id="nav-wheel-btn" onclick="switchMode('wheel')" class="px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800">
+                    <i class="fa-solid fa-arrows-spin"></i> 3. วงล้อท้าทาย
+                </button>
+            </div>
         </div>
     </header>
 
-    <main class="max-w-5xl mx-auto px-4 py-8">
+    <main class="flex-grow max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col gap-6">
 
-        <!-- SECTION 1: 5 NEW MENUS -->
-        <section id="menu-section" class="space-y-6">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-amber-900">✨ 5 เมนูใหม่สุดพิเศษประจำร้าน</h2>
-                <p class="text-amber-700 mt-2">รังสรรค์รสชาติใหม่ กลมกล่อม หอม อร่อย จนต้องเคลิ้ม</p>
+        <!-- ================= SECTION 1: WEIRD MENU SHOWCASE ================= -->
+        <section id="section-menus" class="flex flex-col gap-6">
+            <!-- Intro Banner -->
+            <div class="glass-card p-6 rounded-3xl relative overflow-hidden border border-purple-500/30">
+                <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="text-xs uppercase font-bold tracking-widest text-pink-400 bg-pink-950/60 px-3 py-1 rounded-full border border-pink-800">
+                            <i class="fa-solid fa-sparkles"></i> รายการไอเดียเมนูแปลกแหวกแนว
+                        </span>
+                        <h2 class="text-2xl md:text-3xl font-extrabold text-white mt-2">
+                            คลังรวบรวมอาหาร & เครื่องดื่มสุดพิศวง
+                        </h2>
+                        <p class="text-xs md:text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+                            คัดสรรเมนูที่มีวัตถุดิบและรสชาติขัดแย้งกันอย่างสุดขั้ว เหมาะสำหรับนำไปสร้างคอนเทนต์ จัดปาร์ตี้ท้าลอง หรือสร้างแรงบันดาลใจใหม่ๆ!
+                        </p>
+                    </div>
+
+                    <!-- Category Filter Buttons -->
+                    <div class="flex flex-wrap gap-1.5 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800">
+                        <button onclick="filterMenus('all')" class="cat-btn px-3 py-1 rounded-xl text-xs font-semibold bg-purple-600 text-white transition-all" data-cat="all">ทั้งหมด</button>
+                        <button onclick="filterMenus('savory')" class="cat-btn px-3 py-1 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all" data-cat="savory">ของคาว</button>
+                        <button onclick="filterMenus('sweet')" class="cat-btn px-3 py-1 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all" data-cat="sweet">ของหวาน</button>
+                        <button onclick="filterMenus('drink')" class="cat-btn px-3 py-1 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all" data-cat="drink">เครื่องดื่ม</button>
+                    </div>
+                </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="menu-cards">
-                <!-- Cards rendered via JavaScript -->
+            <div id="menu-cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Rendered dynamically by JS -->
             </div>
         </section>
 
-        <!-- SECTION 2: INTERACTIVE MINI GAME -->
-        <section id="game-section" class="hidden max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-amber-200">
-            <div class="text-center mb-6">
-                <span class="bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full uppercase">Mini-Game</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-amber-900 mt-2">👨‍🍳 เกมเชฟครัวเคลิ้ม: ปรุงเมนูตามสั่ง</h2>
-                <p class="text-gray-600 text-sm mt-1">เลือกระบุ 3 วัตถุดิบหลักให้ถูกต้องตามออเดอร์ของลูกค้า!</p>
-            </div>
-
-            <!-- Game Stats Dashboard -->
-            <div class="flex justify-around items-center bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
-                <div class="text-center">
-                    <span class="text-xs text-gray-500 uppercase block">คะแนน</span>
-                    <span id="game-score" class="text-2xl font-bold text-amber-700">0</span>
+        <!-- ================= SECTION 2: STANDALONE MINI GAME ================= -->
+        <section id="section-game" class="hidden flex-col gap-6">
+            <!-- Game Header Stats Bar -->
+            <div class="glass-card p-4 rounded-2xl flex flex-wrap justify-between items-center gap-3 border border-purple-500/30">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-purple-600/30 text-purple-300 flex items-center justify-center text-xl border border-purple-500/40">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-base text-yellow-300">เกมทายรสประหลาด (Bizarre Taste Quiz)</h3>
+                        <p class="text-xs text-slate-400">ทายวัตถุดิบและส่วนผสมพิศวงให้ถูกต้องเพื่อทำคะแนนสูงสุด!</p>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <span class="text-xs text-gray-500 uppercase block">เวลาเหลือ</span>
-                    <span id="game-timer" class="text-2xl font-bold text-red-600">15s</span>
-                </div>
-                <div class="text-center">
-                    <span class="text-xs text-gray-500 uppercase block">ด่านที่</span>
-                    <span id="game-round" class="text-2xl font-bold text-amber-700">1/5</span>
-                </div>
-            </div>
 
-            <!-- Order Card -->
-            <div id="order-box" class="bg-gradient-to-r from-amber-600 to-orange-500 text-white p-4 rounded-xl shadow-md text-center mb-6">
-                <p class="text-sm opacity-90">ลูกค้าสั่งเมนู:</p>
-                <h3 id="target-dish-name" class="text-2xl font-bold mt-1">กำลังโหลด...</h3>
-            </div>
-
-            <!-- Ingredient Choices Grid -->
-            <div class="mb-6">
-                <p class="text-sm font-semibold text-gray-700 mb-3">เลือกวัตถุดิบ 3 อย่างที่ถูกสูตร:</p>
-                <div id="ingredient-buttons" class="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    <!-- Dynamic Ingredient Buttons -->
+                <div class="flex items-center space-x-4 bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-800 text-xs md:text-sm">
+                    <div class="flex items-center space-x-1.5 text-yellow-400">
+                        <i class="fa-solid fa-trophy"></i>
+                        <span>คะแนน: <b id="game-score" class="text-base text-white">0</b></span>
+                    </div>
+                    <div class="w-px h-4 bg-slate-700"></div>
+                    <div class="flex items-center space-x-1.5 text-pink-400">
+                        <i class="fa-solid fa-fire"></i>
+                        <span>ต่อนเนื่อง: <b id="game-streak" class="text-base text-white">0</b></span>
+                    </div>
+                    <div class="w-px h-4 bg-slate-700"></div>
+                    <div class="flex items-center space-x-1.5 text-cyan-400">
+                        <i class="fa-solid fa-flag-checkered"></i>
+                        <span>ข้อที่: <b id="game-round" class="text-base text-white">1/5</b></span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Game Controls -->
-            <div class="text-center">
-                <button id="btn-submit-dish" onclick="checkAnswer()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition disabled:opacity-50">
-                    🔥 เสิร์ฟจานนี้เลย!
+            <div id="game-playground" class="glass-card p-6 rounded-3xl border border-purple-500/30 flex flex-col items-center text-center relative overflow-hidden min-h-[400px] justify-between">
+                
+                <!-- Question Banner -->
+                <div class="w-full max-w-2xl space-y-2">
+                    <span id="quiz-category" class="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-purple-900/80 text-purple-300 border border-purple-500/40 inline-block">
+                        คำถามระดับความพิลึก 85%
+                    </span>
+                    <h3 id="quiz-question" class="text-lg md:text-2xl font-extrabold text-white leading-snug">
+                        "เมนูชื่อว่า 'ราเมนซุปช็อกโกแลตเข้มข้นไข่เค็ม' มีส่วนผสมลับอย่างหนึ่งที่ใส่นลงไปเพื่อตัดความหวาน คืออะไร?"
+                    </h3>
+                </div>
+
+                <!-- Quiz Visual Graphic -->
+                <div class="my-6 relative w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-3xl bg-slate-900/90 border-2 border-purple-500/30 shadow-2xl">
+                    <span id="quiz-icon" class="text-6xl md:text-7xl animate-bounce">🍜</span>
+                </div>
+
+                <!-- Options Grid -->
+                <div id="quiz-options" class="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <!-- Dynamic Answer Buttons -->
+                </div>
+
+                <!-- Feedback Banner -->
+                <div id="quiz-feedback" class="w-full max-w-2xl mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs hidden text-slate-200">
+                    <!-- Feedback content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: PARTY CHALLENGE WHEEL ================= -->
+        <section id="section-wheel" class="hidden flex-col gap-6">
+            <div class="glass-card p-6 rounded-3xl border border-purple-500/30 text-center flex flex-col items-center">
+                <div class="max-w-md">
+                    <span class="text-xs uppercase font-bold tracking-widest text-yellow-400 bg-yellow-950/60 px-3 py-1 rounded-full border border-yellow-800">
+                        <i class="fa-solid fa-arrows-spin"></i> สำหรับเล่นกับกลุ่มเพื่อน
+                    </span>
+                    <h2 class="text-2xl font-extrabold text-white mt-2">วงล้อท้าทายกินเมนูแปลก!</h2>
+                    <p class="text-xs text-slate-300 mt-1">
+                        กดหมุนวงล้อเพื่อรับภารกิจหรือความท้าทายเกี่ยวกับอาหารพิศวงประจำตานี้
+                    </p>
+                </div>
+
+                <div class="relative my-8 flex items-center justify-center">
+                    <!-- Pointer Arrow -->
+                    <div class="absolute -top-4 z-20 text-yellow-400 text-3xl filter drop-shadow-md">
+                        <i class="fa-solid fa-caret-down"></i>
+                    </div>
+                    
+                    <!-- Canvas Wheel -->
+                    <canvas id="wheelCanvas" width="340" height="340" class="rounded-full border-4 border-purple-500/50 shadow-2xl"></canvas>
+                </div>
+
+                <button id="spin-btn" onclick="spinWheel()" class="py-3 px-8 rounded-2xl font-extrabold text-base text-slate-950 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 shadow-xl transition-all duration-300 flex items-center gap-2">
+                    <i class="fa-solid fa-play"></i> หมุนวงล้อท้าทาย!
                 </button>
-                <button id="btn-restart-game" onclick="startNewGame()" class="hidden mt-3 w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 rounded-xl shadow-lg transition">
-                    🔄 เริ่มเกมใหม่
-                </button>
-            </div>
 
-            <!-- Feedback Message -->
-            <div id="game-feedback" class="mt-4 text-center font-bold text-lg hidden"></div>
+                <!-- Result Box -->
+                <div id="wheel-result" class="mt-6 p-4 rounded-2xl bg-slate-900/90 border border-purple-500/30 max-w-md w-full hidden">
+                    <h4 class="text-xs text-purple-300 font-bold uppercase tracking-wider mb-1">ผลการสุ่มภารกิจ:</h4>
+                    <p id="wheel-result-text" class="text-base font-extrabold text-yellow-300">"กินไอศกรีมวานิลลาราดซอสมะเขือเทศ 1 คำ!"</p>
+                </div>
+            </div>
         </section>
 
     </main>
 
     <script>
-        // Data Structure for 5 New Menus
-        const menus = [
+        // SoundFX Synthesizer using Web Audio API
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+            }
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            playClick() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, this.ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, this.ctx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.05);
+            }
+            playCorrect() {
+                this.init();
+                if (!this.ctx) return;
+                [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.12, this.ctx.currentTime + idx * 0.08);
+                    gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + idx * 0.08 + 0.2);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(this.ctx.currentTime + idx * 0.08);
+                    osc.stop(this.ctx.currentTime + idx * 0.08 + 0.2);
+                });
+            }
+            playWrong() {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(110, this.ctx.currentTime + 0.25);
+                gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + 0.25);
+            }
+        }
+        const sfx = new SoundEngine();
+
+        const WEIRD_MENUS = [
             {
                 id: 1,
-                name: "ข้าวเคลิ้มหมูกรอบซอสมันกุ้งพริกสด",
-                category: "อาหารจานเดียว",
-                price: "159 ฿",
-                desc: "หมูกรอบทอดใหม่หนังพองกรอบ ราดซอสมันกุ้งแม่น้ำรสเข้มข้น ตัดเลี่ยนด้วยพริกขี้หนูสวนสดหอมๆ",
-                icon: "🥓",
-                ingredients: ["หมูกรอบ", "ซอสมันกุ้ง", "พริกขี้หนูสด"]
+                name: "ไอศกรีมวานิลลาซอสน้ำปลาร้าต้มสุก",
+                category: "sweet",
+                icon: "🍨",
+                weirdness: 88,
+                deliciousness: 65,
+                tags: ["หวานมัน", "กลิ่นนัวรุนแรง", "ตัดรสแปลก"],
+                ingredients: ["ไอศกรีมวานิลลาเนียนนุ่ม", "น้ำปลาร้าหอมต้มสุกเคี่ยวหวาน", "แคบหมูกรอบฝอย"],
+                desc: "ความหวานละมุนตัดกับความเค็มและกลิ่นนัวอุมะมิอย่างแปลกประหลาด เมื่อกินพร้อมกันกลับสร้างความกลมกล่อมคล้ายซอลต์คาราเมลเวอร์ชันอีสาน!"
             },
             {
                 id: 2,
-                name: "ต้มยำกุ้งแม่น้ำฟองกะทิมะพร้าวอ่อน",
-                category: "ต้ม / แกง",
-                price: "289 ฿",
-                desc: "ต้มยำน้ำข้นแซ่บกลมกล่อม ท็อปด้วยฟองกะทิสดนุ่มละมุน เนื้อมะพร้าวอ่อน และกุ้งแม่น้ำตัวโต",
-                icon: "🍲",
-                ingredients: ["กุ้งแม่น้ำ", "ฟองกะทิสด", "เนื้อมะพร้าวอ่อน"]
+                name: "ชานมไข่มุกต้มยำกุ้งมะนาวสด",
+                category: "drink",
+                icon: "🧋",
+                weirdness: 92,
+                deliciousness: 50,
+                tags: ["หวานเปรี้ยว", "เผ็ดปลายลิ้น", "ชาเข้มข้น"],
+                ingredients: ["ชานมไต้หวันข้นหวาน", "พริกเผาต้มยำ", "น้ำมะนาวแท้", "ไข่มุกหนึบหนับ"],
+                desc: "เปิดมิติใหม่ของเครื่องดื่ม ชานมหอมหวานปะทะความเปรี้ยวเผ็ดซี้ดของต้มยำกุ้ง ให้ความรู้สึกสดชื่นแปลกใหม่ที่ไม่เคยสัมผัสที่ไหนมาก่อน"
             },
             {
                 id: 3,
-                name: "ผัดไทยหมึกดำเนื้อปูเคลิ้มทะเล",
-                category: "เส้น / ผัด",
-                price: "220 ฿",
-                desc: "เส้นผัดไทยผัดซอสมะขามเข้มข้นผสมหมึกดำธรรมชาติ รสกลมกล่อม ท็อปด้วยเนื้อปูก้อนแน่นๆ",
-                icon: "🍝",
-                ingredients: ["เส้นหมึกดำ", "เนื้อปูก้อน", "ซอสมะขามเข้มข้น"]
+                name: "เค้กช็อกโกแลตซอสมะเขือเทศวาซาบิ",
+                category: "sweet",
+                icon: "🍰",
+                weirdness: 75,
+                deliciousness: 72,
+                tags: ["หวานขม", "จี๊ดขึ้นสมอง", "อมเปรี้ยว"],
+                ingredients: ["เค้กช็อกโกแลตลาวา", "ซอสมะเขือเทศเข้มข้น", "วาซาบิตาแตกสด"],
+                desc: "เนื้อเค้กเข้มข้นตัดรสด้วยซอสมะเขือเทศอมเปรี้ยว และปิดท้ายด้วยกลิ่นฉุนขึ้นสมองของวาซาบิ ช่วยลดความเลี่ยนของช็อกโกแลตได้อย่างดีเยี่ยม"
             },
             {
                 id: 4,
-                name: "เสือร้องไห้ซอสแจ่วเบอร์รีรมควัน",
-                category: "ย่าง / กับแกล้ม",
-                price: "240 ฿",
-                desc: "เนื้อย่างนุ่มฉ่ำ เสิร์ฟพร้อมซอสแจ่วฟิวชันผสมมัลเบอร์รี หวานซ่อนเปรี้ยวและหอมกลิ่นข้าวคั่วรมควัน",
-                icon: "🥩",
-                ingredients: ["เนื้อย่างเสือร้องไห้", "ซอสแจ่วเบอร์รี", "ข้าวคั่วรมควัน"]
+                name: "พิซซ่าหน้าทุเรียนหมอนทองน้ำพริกเผาไข่เค็ม",
+                category: "savory",
+                icon: "🍕",
+                weirdness: 82,
+                deliciousness: 88,
+                tags: ["มันนัว", "กลิ่นหอมแรง", "ชีสยืด"],
+                ingredients: ["แป้งพิซซ่าเตาถ่าน", "เนื้อทุเรียนหมอนทอง", "ซอยน้ำพริกเผา", "ไข่เค็มดินสอพอง", "มอสซาเรลล่าชีส"],
+                desc: "ราชาผลไม้ไทยปะทะชีสอิตาเลียน ความหวานมันของทุเรียนสุกผสมผสานกับความเผ็ดนัวของน้ำพริกเผาและชีสยืด รสชาติอร่อยอย่างไม่น่าเชื่อ!"
             },
             {
                 id: 5,
-                name: "บิงซูชาไทยเคลิ้มกะทิสดลาวา",
-                category: "ของหวาน",
-                price: "169 ฿",
-                desc: "บิงซูชาไทยเข้มข้น ราดซอสนมสดลาวากะทิสด ท็อปด้วยไข่มุกบราวน์ซูการ์นุ่มหนึบ",
-                icon: "🍧",
-                ingredients: ["บิงซูชาไทย", "ลาวากะทิสด", "ไข่มุกบราวน์ซูการ์"]
+                name: "ราเมนน้ำซุปช็อกโกแลตเป็ดร่อน",
+                category: "savory",
+                icon: "🍜",
+                weirdness: 85,
+                deliciousness: 78,
+                tags: ["กลมกล่อม", "ซุปข้น", "กลิ่นโกโก้"],
+                ingredients: ["เส้นราเมนสด", "ซุปกระดูกหมูผสมดาร์กช็อกโกแลต 70%", "เนื้อเป็ดย่าง", "ต้นหอมญี่ปุ่น"],
+                desc: "ได้รับแรงบันดาลใจจากซอสมอเล (Mole) ของเม็กซิโก ช็อกโกแลตขมเข้มช่วยเพิ่มความมิติและความลึกให้ซุปราเมนกลมกล่อมยิ่งขึ้น"
+            },
+            {
+                id: 6,
+                name: "พุดดิ้งนมสดซอสผงแมลงทอดกรอบ",
+                category: "sweet",
+                icon: "🍮",
+                weirdness: 79,
+                deliciousness: 70,
+                tags: ["นุ่มเด้ง", "กรุบกรอบ", "โปรตีนสูง"],
+                ingredients: ["พุดดิ้งนมสดฮอกไกโด", "ผงสะดิ้งและจิ้งหรีดอบกรอบ", "ไซรัปคาราเมลน้ำผึ้ง"],
+                desc: "พุดดิ้งเนื้อเด้งดึ๋งนุ่มลิ้น โรยด้วยผงแมลงอบกรอบรสเค็มมันมัน เพิ่มสัมผัสกรุบกรอบในการเคี้ยวคล้ายถั่วอบเกลือ"
             }
         ];
 
-        // All pooled ingredients for game randomness
-        const extraIngredients = [
-            "ผักชีฝรั่ง", "ซอสมะเขือเทศ", "ชีสแผ่น", "วาซาบิ", "กระเทียมเจียว", "น้ำพริกเผา"
+        const QUIZ_QUESTIONS = [
+            {
+                q: "เมนู 'ไอศกรีมวานิลลาซอสน้ำปลาร้า' ให้สัมผัสรสชาติคล้ายกับของหวานชนิดใดมากที่สุด?",
+                options: ["ซอลต์คาราเมล (Salted Caramel)", "สตอเบอรี่โยเกิร์ต", "เค้กส้มมะนาว", "มัทฉะลาเต้"],
+                correct: 0,
+                explain: "ความเค็มและนัวของน้ำปลาร้าเมื่อตัดกับความหวานมันของไอศกรีมวานิลลา จะได้รสชาติคล้าย Salted Caramel อย่างเหลือเชื่อ!"
+            },
+            {
+                q: "วัตถุดิบหลักใดใน 'พิซซ่าหน้าทุเรียนน้ำพริกเผา' ที่ช่วยลดความเลี่ยนของชีสและทุเรียนได้ดีที่สุด?",
+                options: ["ผักชีฝรั่ง", "ซอยน้ำพริกเผาเปรี้ยวเผ็ด", "สับปะรดแว่น", "มายองเนส"],
+                correct: 1,
+                explain: "น้ำพริกเผามีความเผ็ด เค็ม และกลิ่นหอมพริกอบ ช่วยตัดรสความมันของชีสและทุเรียนได้อย่างลงตัว"
+            },
+            {
+                q: "เชฟระดับโลกมักนำ 'ช็อกโกแลตเข้มข้น' ไปผสมในเมนูของคาวประเภทใดเพื่อเพิ่มความกลมกล่อม?",
+                options: ["ต้มยำกุ้งน้ำใส", "ซุปสตูว์เนื้อหรือซุปราเมนข้น", "ยำปลาดุกฟู", "แกงจืดเต้าหู้หมูสับ"],
+                correct: 1,
+                explain: "ดาร์กช็อกโกแลตเข้มข้นนิยมนำมาใส่ในสตูว์เนื้อและซุปข้น เพื่อเพิ่มความหอม ลึก และความนัวของน้ำซุป"
+            },
+            {
+                q: "หากต้องการเพิ่มสัมผัส 'กรุบกรอบโปรตีนสูง' ให้กับพุดดิ้งนมสด ควรใช้วัตถุดิบแปลกประหลาดใด?",
+                options: ["ผงแมลงทอดอบกรอบ", "เกล็ดหิมะวาซาบิ", "เยลลี่พริกสด", "เนื้อกระเทียมโทน"],
+                correct: 0,
+                explain: "ผงแมลงทอดอบกรอบให้รสชาติมันๆ คล้ายถั่วอบเกลือ เพิ่มสัมผัสกรุบกรอบแปลกใหม่ให้พุดดิ้ง"
+            },
+            {
+                q: "เมนูเครื่องดื่ม 'ชานมไข่มุกต้มยำกุ้ง' มีเอกลักษณ์ของรสชาติอย่างไร?",
+                options: ["หวานมัน นุ่มนวล เปรี้ยวเผ็ดซี้ดปลายลิ้น", "เค็มจัดจนกินไม่ได้", "จืดสนิทไร้รสชาติ", "ขมเหมือนยาต้ม"],
+                correct: 0,
+                explain: "ชานมหอมหวานเมื่อตัดด้วยพริกเผาและมะนาวสด จะได้รสหวานเปรี้ยวซี้ดซาดตื่นตัว!"
+            }
         ];
 
-        // Render Menu Cards
-        function renderMenuCards() {
-            const container = document.getElementById('menu-cards');
-            container.innerHTML = menus.map(m => `
-                <div class="bg-white rounded-2xl shadow-md border border-amber-100 overflow-hidden hover:shadow-xl transition duration-300">
-                    <div class="bg-gradient-to-r from-amber-100 to-orange-100 p-6 text-center text-5xl">
-                        ${m.icon}
-                    </div>
-                    <div class="p-5">
-                        <div class="flex justify-between items-start mb-2">
-                            <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2.5 py-1 rounded-full">${m.category}</span>
-                            <span class="text-lg font-bold text-amber-900">${m.price}</span>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-2">${m.name}</h3>
-                        <p class="text-gray-600 text-sm mb-4">${m.desc}</p>
-                        <div class="border-t border-gray-100 pt-3">
-                            <span class="text-xs text-gray-500 font-semibold">วัตถุดิบหลัก:</span>
-                            <div class="flex flex-wrap gap-1 mt-1">
-                                ${m.ingredients.map(ing => `<span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">${ing}</span>`).join('')}
+        const WHEEL_TASKS = [
+            "กินไอศกรีมวานิลลาราดซอสมะเขือเทศ 1 คำ!",
+            "ดมกลิ่นน้ำปลาร้าหลับตาแล้วทายเมนู!",
+            "กินขนมปังทาเนยราดน้ำพริกเผา!",
+            "ดื่มน้ำมะนาวผสมนมข้นหวาน 1 จิบ!",
+            "กินมันเฟรนช์ฟรายส์จิ้มไอศกรีม!",
+            "รอดตัวไป! ไม่ต้องกินอะไรในตานี้",
+            "ท้าเพื่อนข้างๆ กินกาแฟใส่เกลือ 1 ช้อนชา!",
+            "กินเค้กช็อกโกแลตแต้มวาซาบิเล็กน้อย!"
+        ];
+
+        // State management
+        let currentQuizIndex = 0;
+        let score = 0;
+        let streak = 0;
+        let isAnswered = false;
+
+        // Wheel animation variables
+        let isSpinning = false;
+        let currentAngle = 0;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMenus(WEIRD_MENUS);
+            loadQuizQuestion();
+            drawWheel();
+        });
+
+        function renderMenus(items) {
+            const grid = document.getElementById('menu-cards-grid');
+            if (items.length === 0) {
+                grid.innerHTML = `<p class="col-span-full text-center text-slate-400 py-10">ไม่พบเมนูในหมวดหมู่นี้</p>`;
+                return;
+            }
+
+            grid.innerHTML = items.map(menu => `
+                <div class="glass-card p-5 rounded-3xl glass-card-hover border border-slate-800 flex flex-col justify-between space-y-4 relative overflow-hidden">
+                    <div>
+                        <!-- Header Icon & Category -->
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="w-14 h-14 rounded-2xl bg-slate-900/90 border border-purple-500/30 flex items-center justify-center text-3xl shadow-inner">
+                                ${menu.icon}
                             </div>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full bg-purple-950/80 text-purple-300 border border-purple-800">
+                                พิศวง ${menu.weirdness}%
+                            </span>
                         </div>
+
+                        <!-- Title & Description -->
+                        <h3 class="text-lg font-bold text-yellow-300 leading-snug">${menu.name}</h3>
+                        <p class="text-xs text-slate-300 mt-2 leading-relaxed italic">"${menu.desc}"</p>
+
+                        <!-- Ingredients List -->
+                        <div class="mt-4 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+                            <span class="text-[11px] font-bold text-slate-400 block mb-1">
+                                <i class="fa-solid fa-mortar-pestle text-pink-400"></i> ส่วนผสมหลัก:
+                            </span>
+                            <ul class="text-xs text-slate-300 space-y-0.5 list-disc list-inside">
+                                ${menu.ingredients.map(ing => `<li>${ing}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="pt-2 flex flex-wrap gap-1 border-t border-slate-800">
+                        ${menu.tags.map(t => `<span class="text-[10px] bg-purple-900/40 text-purple-200 px-2 py-0.5 rounded-md border border-purple-500/20">#${t}</span>`).join('')}
                     </div>
                 </div>
             `).join('');
         }
 
-        // Tab Navigation
-        function switchTab(tab) {
-            const menuSec = document.getElementById('menu-section');
-            const gameSec = document.getElementById('game-section');
-            const btnMenu = document.getElementById('btn-menu');
-            const btnGame = document.getElementById('btn-game');
+        function filterMenus(cat) {
+            sfx.playClick();
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-btn px-3 py-1 rounded-xl text-xs font-semibold bg-purple-600 text-white transition-all";
+                } else {
+                    btn.className = "cat-btn px-3 py-1 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition-all";
+                }
+            });
 
-            if(tab === 'menu') {
-                menuSec.classList.remove('hidden');
-                gameSec.classList.add('hidden');
-                btnMenu.classList.add('bg-opacity-70');
-                btnGame.classList.remove('bg-opacity-70');
+            if (cat === 'all') {
+                renderMenus(WEIRD_MENUS);
             } else {
-                menuSec.classList.add('hidden');
-                gameSec.classList.remove('hidden');
-                btnGame.classList.add('bg-opacity-70');
-                btnMenu.classList.remove('bg-opacity-70');
-                if(!gameActive && score === 0) startNewGame();
+                renderMenus(WEIRD_MENUS.filter(m => m.category === cat));
             }
         }
 
-        // Game State Variables
-        let currentRound = 0;
-        let score = 0;
-        let timer = 15;
-        let timerInterval = null;
-        let selectedIngredients = [];
-        let currentTargetDish = null;
-        let gameActive = false;
+        function switchMode(mode) {
+            sfx.playClick();
+            const secMenus = document.getElementById('section-menus');
+            const secGame = document.getElementById('section-game');
+            const secWheel = document.getElementById('section-wheel');
 
-        function startNewGame() {
+            const btnMenus = document.getElementById('nav-menu-btn');
+            const btnGame = document.getElementById('nav-game-btn');
+            const btnWheel = document.getElementById('nav-wheel-btn');
+
+            [secMenus, secGame, secWheel].forEach(s => s.classList.add('hidden'));
+            [btnMenus, btnGame, btnWheel].forEach(b => {
+                b.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800";
+            });
+
+            if (mode === 'menus') {
+                secMenus.classList.remove('hidden');
+                btnMenus.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md";
+            } else if (mode === 'game') {
+                secGame.classList.remove('hidden');
+                secGame.classList.add('flex');
+                btnGame.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md";
+            } else if (mode === 'wheel') {
+                secWheel.classList.remove('hidden');
+                secWheel.classList.add('flex');
+                btnWheel.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-md";
+                drawWheel();
+            }
+        }
+
+        function loadQuizQuestion() {
+            isAnswered = false;
+            const qData = QUIZ_QUESTIONS[currentQuizIndex];
+
+            document.getElementById('game-round').innerText = `${currentQuizIndex + 1}/${QUIZ_QUESTIONS.length}`;
+            document.getElementById('quiz-question').innerText = `"${qData.q}"`;
+            document.getElementById('quiz-feedback').classList.add('hidden');
+
+            const optionsBox = document.getElementById('quiz-options');
+            optionsBox.innerHTML = qData.options.map((opt, idx) => `
+                <button onclick="checkAnswer(${idx})" id="opt-btn-${idx}" class="p-3.5 rounded-2xl border border-slate-700 bg-slate-900/80 hover:border-purple-500 hover:bg-purple-950/40 text-left text-xs md:text-sm font-medium transition-all text-slate-200 flex items-center space-x-3">
+                    <span class="w-6 h-6 rounded-full bg-purple-900/80 text-purple-300 flex items-center justify-center text-xs font-bold border border-purple-700">${String.fromCharCode(65 + idx)}</span>
+                    <span class="flex-1">${opt}</span>
+                </button>
+            `).join('');
+        }
+
+        function checkAnswer(selectedIdx) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const qData = QUIZ_QUESTIONS[currentQuizIndex];
+            const feedbackBox = document.getElementById('quiz-feedback');
+            feedbackBox.classList.remove('hidden');
+
+            if (selectedIdx === qData.correct) {
+                sfx.playCorrect();
+                score += 100 + (streak * 20);
+                streak++;
+                document.getElementById(`opt-btn-${selectedIdx}`).className = "p-3.5 rounded-2xl border-2 border-green-500 bg-green-950/60 text-left text-xs md:text-sm font-bold text-green-300 flex items-center space-x-3";
+                feedbackBox.className = "w-full max-w-2xl mt-4 p-3 rounded-xl bg-green-950/80 border border-green-700 text-xs text-green-200 text-left";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-check text-green-400 mr-1"></i> <b>ถูกต้อง!</b> ${qData.explain}`;
+            } else {
+                sfx.playWrong();
+                streak = 0;
+                document.getElementById(`opt-btn-${selectedIdx}`).className = "p-3.5 rounded-2xl border-2 border-red-500 bg-red-950/60 text-left text-xs md:text-sm font-bold text-red-300 flex items-center space-x-3";
+                document.getElementById(`opt-btn-${qData.correct}`).className = "p-3.5 rounded-2xl border-2 border-green-500 bg-green-950/60 text-left text-xs md:text-sm font-bold text-green-300 flex items-center space-x-3";
+                
+                feedbackBox.className = "w-full max-w-2xl mt-4 p-3 rounded-xl bg-red-950/80 border border-red-700 text-xs text-red-200 text-left";
+                feedbackBox.innerHTML = `<i class="fa-solid fa-circle-xmark text-red-400 mr-1"></i> <b>ยังไม่ถูกต้อง!</b> ${qData.explain}`;
+            }
+
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('game-streak').innerText = streak;
+
+            setTimeout(() => {
+                if (currentQuizIndex < QUIZ_QUESTIONS.length - 1) {
+                    currentQuizIndex++;
+                    loadQuizQuestion();
+                } else {
+                    // Game Finished
+                    showGameFinishedModal();
+                }
+            }, 3000);
+        }
+
+        function showGameFinishedModal() {
+            const playground = document.getElementById('game-playground');
+            playground.innerHTML = `
+                <div class="my-auto space-y-4 py-8">
+                    <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-yellow-400 to-amber-500 mx-auto flex items-center justify-center text-4xl text-slate-950 shadow-2xl animate-bounce">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="text-2xl font-extrabold text-yellow-300">จบเกมทายรสพิศวง!</h3>
+                    <p class="text-sm text-slate-300">คุณทำคะแนนรวมได้ทั้งหมด: <b class="text-xl text-green-400">${score}</b> คะแนน!</p>
+                    <button onclick="resetGame()" class="py-3 px-8 rounded-2xl font-bold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg transition-all">
+                        <i class="fa-solid fa-rotate-right"></i> เล่นใหม่อีกครั้ง
+                    </button>
+                </div>
+            `;
+        }
+
+        function resetGame() {
+            sfx.playClick();
+            currentQuizIndex = 0;
+            score = 0;
+            streak = 0;
+            document.getElementById('game-score').innerText = '0';
+            document.getElementById('game-streak').innerText = '0';
+
+            const playground = document.getElementById('game-playground');
+            playground.innerHTML = `
+                <div class="w-full max-w-2xl space-y-2">
+                    <span id="quiz-category" class="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-purple-900/80 text-purple-300 border border-purple-500/40 inline-block">
+                        คำถามระดับความพิลึก
+                    </span>
+                    <h3 id="quiz-question" class="text-lg md:text-2xl font-extrabold text-white leading-snug"></h3>
+                </div>
+                <div class="my-6 relative w-32 h-32 md:w-40 md:h-40 flex items-center justify-center rounded-3xl bg-slate-900/90 border-2 border-purple-500/30 shadow-2xl">
+                    <span id="quiz-icon" class="text-6xl md:text-7xl animate-bounce">🍜</span>
+                </div>
+                <div id="quiz-options" class="w-full max-w-2xl grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                <div id="quiz-feedback" class="w-full max-w-2xl mt-4 p-3 rounded-xl bg-slate-900/80 border border-slate-800 text-xs hidden text-slate-200"></div>
+            `;
+            loadQuizQuestion();
+        }
+
+        function drawWheel() {
+            const canvas = document.getElementById('wheelCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const numSlices = WHEEL_TASKS.length;
+            const sliceAngle = (2 * Math.PI) / numSlices;
+            const colors = ['#8b5cf6', '#ec4899', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#6366f1', '#14b8a6'];
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+            const radius = cx - 10;
+
+            for (let i = 0; i < numSlices; i++) {
+                const angle = currentAngle + i * sliceAngle;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.arc(cx, cy, radius, angle, angle + sliceAngle);
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#0f172a';
+                ctx.stroke();
+
+                // Draw Text
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(angle + sliceAngle / 2);
+                ctx.textAlign = 'right';
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 11px Prompt';
+                ctx.fillText(`ภารกิจที่ ${i + 1}`, radius - 20, 4);
+                ctx.restore();
+            }
+
+            // Center Pin
+            ctx.beginPath();
+            ctx.arc(cx, cy, 24, 0, 2 * Math.PI);
+            ctx.fillStyle = '#0f172a';
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#eab308';
+            ctx.stroke();
+        }
+
+        function spinWheel() {
+            if (isSpinning) return;
+            sfx.playClick();
+            isSpinning = true;
+
+            const spinBtn = document.getElementById('spin-btn');
+            spinBtn.disabled = true;
+            spinBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            document.getElementById('wheel-result').classList.add('hidden');
+
+            const spinAngle = Math.random() * 10 + 20; // total rotation
+            let currentStep = 0;
+            const totalSteps = 100;
+
+            const timer = setInterval(() => {
+                currentStep++;
+                const easeOut = Math.sin((currentStep / totalSteps) * (Math.PI / 2));
+                currentAngle += (spinAngle / totalSteps) * (1 - easeOut + 0.1);
+                drawWheel();
+
+                if (currentStep >= totalSteps) {
+                    clearInterval(timer);
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+                    spinBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                    // Calculate selected task
+                    const numSlices = WHEEL_TASKS.length;
+                    const sliceAngle = (2 * Math.PI) / numSlices;
+                    const normalizedAngle = (Math.PI / 2 - currentAngle) % (2 * Math.PI);
+                    const positiveAngle = normalizedAngle < 0 ? normalizedAngle + 2 * Math.PI : normalizedAngle;
+                    const winningIndex = Math.floor(positiveAngle / sliceAngle) % numSlices;
+
+                    sfx.playCorrect();
+                    const resultBox = document.getElementById('wheel-result');
+                    const resultText = document.getElementById('wheel-result-text');
+                    resultText.innerText = `"${WHEEL_TASKS[winningIndex]}"`;
+                    resultBox.classList.remove('hidden');
+                }
+            }, 30);
+        }
+    </script>
+</body>
+</html>
