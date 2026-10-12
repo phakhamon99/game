@@ -3,207 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ร้านอาหารฟิวชัน & เกมจับคู่เมนูเด็ด</title>
+    <title>ครัวเคลิ้ม - 5 เมนูใหม่ & เกมปรุงอาหาร</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap');
         body { font-family: 'Kanit', sans-serif; }
-        .card-flip { transform-style: preserve-3d; transition: transform 0.6s; }
-        .flipped { transform: rotateY(180deg); }
-        .backface-hidden { backface-visibility: hidden; }
     </style>
 </head>
 <body class="bg-amber-50 text-slate-800 min-h-screen">
 
-    <!-- Header Section -->
-    <header class="bg-gradient-to-r from-amber-600 to-orange-600 text-white py-10 shadow-lg text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-2">🍽️ Culinary Fusion Experience</h1>
-        <p class="text-amber-100 text-lg">ไอเดียเมนูใหม่ ชื่อร้านสุดเก๋ และเกมสนุกๆ สำหรับคุณ</p>
+    <!-- Header / Navbar -->
+    <header class="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl md:text-3xl font-bold tracking-wide">🍳 ครัวเคลิ้ม (Khrua Khloem)</h1>
+            <nav class="space-x-2">
+                <button onclick="switchTab('menu')" id="btn-menu" class="px-4 py-2 bg-amber-900 bg-opacity-40 hover:bg-opacity-70 rounded-full font-semibold transition">📋 เมนูใหม่</button>
+                <button onclick="switchTab('game')" id="btn-game" class="px-4 py-2 bg-amber-900 bg-opacity-40 hover:bg-opacity-70 rounded-full font-semibold transition">🎮 เกมเชฟเคลิ้ม</button>
+            </nav>
+        </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-8 space-y-12">
+    <main class="max-w-5xl mx-auto px-4 py-8">
 
-        <!-- 1. Restaurant Names Section -->
-        <section class="bg-white rounded-2xl p-6 shadow-md border border-amber-100">
-            <h2 class="text-2xl font-bold text-amber-800 mb-4 flex items-center gap-2">
-                <i class="fa-solid font-bold fa-store text-orange-500"></i> ไอเดียชื่อร้านอาหารใหม่ๆ
-            </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3" id="storeNameContainer">
-                <!-- Javascript will populate or static -->
-                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">ปรุงสุข Bistro</div>
-                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">รสเสน่หา Fusion</div>
-                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">อัคนี & ปฐพี</div>
-                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">รสรินทร์ Dining</div>
-                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-center font-semibold text-amber-900 shadow-sm">ครัวชวนเคลิ้ม</div>
+        <!-- SECTION 1: 5 NEW MENUS -->
+        <section id="menu-section" class="space-y-6">
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-amber-900">✨ 5 เมนูใหม่สุดพิเศษประจำร้าน</h2>
+                <p class="text-amber-700 mt-2">รังสรรค์รสชาติใหม่ กลมกล่อม หอม อร่อย จนต้องเคลิ้ม</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="menu-cards">
+                <!-- Cards rendered via JavaScript -->
             </div>
         </section>
 
-        <!-- 2. Creative Menu Section -->
-        <section>
-            <h2 class="text-3xl font-bold text-slate-800 mb-6 flex items-center gap-2">
-                <i class="fa-solid fa-utensils text-orange-500"></i> 5 เมนูใหม่สุดสร้างสรรค์
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="menuGrid">
-                <!-- Filled via JS -->
-            </div>
-        </section>
-
-        <!-- 3. Mini Game Section -->
-        <section class="bg-white rounded-2xl p-6 md:p-8 shadow-xl border border-orange-200">
+        <!-- SECTION 2: INTERACTIVE MINI GAME -->
+        <section id="game-section" class="hidden max-w-2xl mx-auto bg-white p-6 md:p-8 rounded-2xl shadow-xl border border-amber-200">
             <div class="text-center mb-6">
-                <h2 class="text-3xl font-bold text-orange-600 mb-2">🎮 เกมจับคู่เมนูเด็ด (Food Memory Game)</h2>
-                <p class="text-slate-600">จับคู่ภาพเมนูอาหารที่เหมือนกันให้ครบเพื่อรับรางวัลส่วนลดพิเศษ!</p>
-                <div class="mt-4 flex justify-center gap-6 text-lg font-semibold text-slate-700">
-                    <div>เวลา: <span id="timer" class="text-orange-600">0</span> วินาที</div>
-                    <div>จับคู่สำเร็จ: <span id="score" class="text-green-600">0</span> / 4 คู่</div>
+                <span class="bg-orange-100 text-orange-800 text-xs font-semibold px-3 py-1 rounded-full uppercase">Mini-Game</span>
+                <h2 class="text-2xl md:text-3xl font-bold text-amber-900 mt-2">👨‍🍳 เกมเชฟครัวเคลิ้ม: ปรุงเมนูตามสั่ง</h2>
+                <p class="text-gray-600 text-sm mt-1">เลือกระบุ 3 วัตถุดิบหลักให้ถูกต้องตามออเดอร์ของลูกค้า!</p>
+            </div>
+
+            <!-- Game Stats Dashboard -->
+            <div class="flex justify-around items-center bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
+                <div class="text-center">
+                    <span class="text-xs text-gray-500 uppercase block">คะแนน</span>
+                    <span id="game-score" class="text-2xl font-bold text-amber-700">0</span>
+                </div>
+                <div class="text-center">
+                    <span class="text-xs text-gray-500 uppercase block">เวลาเหลือ</span>
+                    <span id="game-timer" class="text-2xl font-bold text-red-600">15s</span>
+                </div>
+                <div class="text-center">
+                    <span class="text-xs text-gray-500 uppercase block">ด่านที่</span>
+                    <span id="game-round" class="text-2xl font-bold text-amber-700">1/5</span>
                 </div>
             </div>
 
-            <!-- Memory Game Grid -->
-            <div id="gameBoard" class="grid grid-cols-4 gap-3 max-w-lg mx-auto min-h-[300px]">
-                <!-- Cards generated via JS -->
+            <!-- Order Card -->
+            <div id="order-box" class="bg-gradient-to-r from-amber-600 to-orange-500 text-white p-4 rounded-xl shadow-md text-center mb-6">
+                <p class="text-sm opacity-90">ลูกค้าสั่งเมนู:</p>
+                <h3 id="target-dish-name" class="text-2xl font-bold mt-1">กำลังโหลด...</h3>
             </div>
 
-            <div class="text-center mt-6">
-                <button onclick="resetGame()" class="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-2.5 px-6 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95">
-                    <i class="fa-solid fa-rotate-right mr-2"></i> เริ่มเกมใหม่
+            <!-- Ingredient Choices Grid -->
+            <div class="mb-6">
+                <p class="text-sm font-semibold text-gray-700 mb-3">เลือกวัตถุดิบ 3 อย่างที่ถูกสูตร:</p>
+                <div id="ingredient-buttons" class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <!-- Dynamic Ingredient Buttons -->
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div class="text-center">
+                <button id="btn-submit-dish" onclick="checkAnswer()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl shadow-lg transition disabled:opacity-50">
+                    🔥 เสิร์ฟจานนี้เลย!
+                </button>
+                <button id="btn-restart-game" onclick="startNewGame()" class="hidden mt-3 w-full bg-amber-800 hover:bg-amber-900 text-white font-bold py-3 rounded-xl shadow-lg transition">
+                    🔄 เริ่มเกมใหม่
                 </button>
             </div>
+
+            <!-- Feedback Message -->
+            <div id="game-feedback" class="mt-4 text-center font-bold text-lg hidden"></div>
         </section>
 
     </main>
 
-    <footer class="text-center py-6 text-slate-500 text-sm">
-        © 2026 Modern Kitchen Studio. All rights reserved.
-    </footer>
-
-    <!-- JavaScript logic -->
     <script>
-        // Menu Data
+        // Data Structure for 5 New Menus
         const menus = [
             {
-                title: "กะเพราเนื้อลาวาไข่เค็มดิป",
-                category: "อาหารจานหลัก",
-                tag: "Best Seller",
-                desc: "เนื้อออสเตรเลียสับผัดกะเพราพริกแห้งเข้มข้น ราดด้วยซอสไข่เค็มลาวาเยิ้มรสกลมกล่อม",
-                icon: "fa-fire-burner",
-                price: "189 ฿"
+                id: 1,
+                name: "ข้าวเคลิ้มหมูกรอบซอสมันกุ้งพริกสด",
+                category: "อาหารจานเดียว",
+                price: "159 ฿",
+                desc: "หมูกรอบทอดใหม่หนังพองกรอบ ราดซอสมันกุ้งแม่น้ำรสเข้มข้น ตัดเลี่ยนด้วยพริกขี้หนูสวนสดหอมๆ",
+                icon: "🥓",
+                ingredients: ["หมูกรอบ", "ซอสมันกุ้ง", "พริกขี้หนูสด"]
             },
             {
-                title: "ส้มตำทอดทรัฟเฟิลกุ้งแม่น้ำ",
-                category: "อาหารทานเล่น/ยำ",
-                tag: "Fusion",
-                desc: "มะละกอกรอบทอด คลุกเคล้าซอสมะขามหวานซ่อนเปรี้ยวหอมทรัฟเฟิล เสิร์ฟพร้อมกุ้งแม่น้ำย่างเนย",
-                icon: "fa-shrimp",
-                price: "249 ฿"
+                id: 2,
+                name: "ต้มยำกุ้งแม่น้ำฟองกะทิมะพร้าวอ่อน",
+                category: "ต้ม / แกง",
+                price: "289 ฿",
+                desc: "ต้มยำน้ำข้นแซ่บกลมกล่อม ท็อปด้วยฟองกะทิสดนุ่มละมุน เนื้อมะพร้าวอ่อน และกุ้งแม่น้ำตัวโต",
+                icon: "🍲",
+                ingredients: ["กุ้งแม่น้ำ", "ฟองกะทิสด", "เนื้อมะพร้าวอ่อน"]
             },
             {
-                title: "ต้มยำมันกุ้งริซอตโต้",
-                category: "อาหารจานหลัก",
-                tag: "Chef Recommended",
-                desc: "ข้าวสไตล์อิตาเลียนริซอตโต้ผัดซอสต้มยำมันกุ้งเข้มข้น รสชาติไทยแท้จัดจ้าน",
-                icon: "fa-bowl-rice",
-                price: "229 ฿"
+                id: 3,
+                name: "ผัดไทยหมึกดำเนื้อปูเคลิ้มทะเล",
+                category: "เส้น / ผัด",
+                price: "220 ฿",
+                desc: "เส้นผัดไทยผัดซอสมะขามเข้มข้นผสมหมึกดำธรรมชาติ รสกลมกล่อม ท็อปด้วยเนื้อปูก้อนแน่นๆ",
+                icon: "🍝",
+                ingredients: ["เส้นหมึกดำ", "เนื้อปูก้อน", "ซอสมะขามเข้มข้น"]
             },
             {
-                title: "ชานมชาไทยพ่นไฟอัคนี",
-                category: "เครื่องดื่ม",
-                tag: "Signature Drink",
-                desc: "ชาไทยเข้มข้นสกัดเย็น ท็อปด้วยครีมชีสนุ่มพ่นไฟน้ำตาลอ้อย และไข่มุกเฉาก๊วย",
-                icon: "fa-glass-water",
-                price: "85 ฿"
+                id: 4,
+                name: "เสือร้องไห้ซอสแจ่วเบอร์รีรมควัน",
+                category: "ย่าง / กับแกล้ม",
+                price: "240 ฿",
+                desc: "เนื้อย่างนุ่มฉ่ำ เสิร์ฟพร้อมซอสแจ่วฟิวชันผสมมัลเบอร์รี หวานซ่อนเปรี้ยวและหอมกลิ่นข้าวคั่วรมควัน",
+                icon: "🥩",
+                ingredients: ["เนื้อย่างเสือร้องไห้", "ซอสแจ่วเบอร์รี", "ข้าวคั่วรมควัน"]
             },
             {
-                title: "ไอศกรีมกะทิอบควันเทียนข้าวแต๋น",
+                id: 5,
+                name: "บิงซูชาไทยเคลิ้มกะทิสดลาวา",
                 category: "ของหวาน",
-                tag: "New Dessert",
-                desc: "ไอศกรีมกะทิหอมกลิ่นอบควันเทียน ราดซอสน้ำตาลตโนดเคี่ยว บนฐานข้าวแต๋นกรอบ",
-                icon: "fa-ice-cream",
-                price: "95 ฿"
+                price: "169 ฿",
+                desc: "บิงซูชาไทยเข้มข้น ราดซอสนมสดลาวากะทิสด ท็อปด้วยไข่มุกบราวน์ซูการ์นุ่มหนึบ",
+                icon: "🍧",
+                ingredients: ["บิงซูชาไทย", "ลาวากะทิสด", "ไข่มุกบราวน์ซูการ์"]
             }
         ];
 
-        // Render Menus
-        const menuGrid = document.getElementById('menuGrid');
-        menus.forEach(item => {
-            menuGrid.innerHTML += `
-                <div class="bg-white rounded-2xl p-5 shadow-md hover:shadow-xl transition border border-amber-100 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">${item.tag}</span>
-                            <span class="text-xl font-bold text-orange-600">${item.price}</span>
+        // All pooled ingredients for game randomness
+        const extraIngredients = [
+            "ผักชีฝรั่ง", "ซอสมะเขือเทศ", "ชีสแผ่น", "วาซาบิ", "กระเทียมเจียว", "น้ำพริกเผา"
+        ];
+
+        // Render Menu Cards
+        function renderMenuCards() {
+            const container = document.getElementById('menu-cards');
+            container.innerHTML = menus.map(m => `
+                <div class="bg-white rounded-2xl shadow-md border border-amber-100 overflow-hidden hover:shadow-xl transition duration-300">
+                    <div class="bg-gradient-to-r from-amber-100 to-orange-100 p-6 text-center text-5xl">
+                        ${m.icon}
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="text-xs bg-amber-100 text-amber-800 font-semibold px-2.5 py-1 rounded-full">${m.category}</span>
+                            <span class="text-lg font-bold text-amber-900">${m.price}</span>
                         </div>
-                        <div class="text-3xl text-orange-500 mb-2">
-                            <i class="fa-solid ${item.icon}"></i>
+                        <h3 class="text-xl font-bold text-slate-800 mb-2">${m.name}</h3>
+                        <p class="text-gray-600 text-sm mb-4">${m.desc}</p>
+                        <div class="border-t border-gray-100 pt-3">
+                            <span class="text-xs text-gray-500 font-semibold">วัตถุดิบหลัก:</span>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${m.ingredients.map(ing => `<span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">${ing}</span>`).join('')}
+                            </div>
                         </div>
-                        <h3 class="text-xl font-bold text-slate-800 mb-1">${item.title}</h3>
-                        <p class="text-xs font-semibold text-amber-600 mb-2">${item.category}</p>
-                        <p class="text-slate-600 text-sm leading-relaxed">${item.desc}</p>
                     </div>
                 </div>
-            `;
-        });
+            `).join('');
+        }
 
-        // Game Logic
-        const cardIcons = ['fa-fire-burner', 'fa-shrimp', 'fa-bowl-rice', 'fa-ice-cream'];
-        let cards = [...cardIcons, ...cardIcons]; // 4 pairs (8 cards)
-        let flippedCards = [];
-        let matchedPairs = 0;
+        // Tab Navigation
+        function switchTab(tab) {
+            const menuSec = document.getElementById('menu-section');
+            const gameSec = document.getElementById('game-section');
+            const btnMenu = document.getElementById('btn-menu');
+            const btnGame = document.getElementById('btn-game');
+
+            if(tab === 'menu') {
+                menuSec.classList.remove('hidden');
+                gameSec.classList.add('hidden');
+                btnMenu.classList.add('bg-opacity-70');
+                btnGame.classList.remove('bg-opacity-70');
+            } else {
+                menuSec.classList.add('hidden');
+                gameSec.classList.remove('hidden');
+                btnGame.classList.add('bg-opacity-70');
+                btnMenu.classList.remove('bg-opacity-70');
+                if(!gameActive && score === 0) startNewGame();
+            }
+        }
+
+        // Game State Variables
+        let currentRound = 0;
+        let score = 0;
+        let timer = 15;
         let timerInterval = null;
-        let seconds = 0;
-        let gameStarted = false;
+        let selectedIngredients = [];
+        let currentTargetDish = null;
+        let gameActive = false;
 
-        function shuffle(array) {
-            return array.sort(() => Math.random() - 0.5);
-        }
-
-        function createGameBoard() {
-            const board = document.getElementById('gameBoard');
-            board.innerHTML = '';
-            const shuffledCards = shuffle([...cards]);
-
-            shuffledCards.forEach((icon, index) => {
-                const card = document.createElement('div');
-                card.className = 'relative w-full h-24 cursor-pointer perspective';
-                card.innerHTML = `
-                    <div class="card-inner card-flip w-full h-full relative rounded-xl shadow-md" data-icon="${icon}">
-                        <div class="absolute inset-0 bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-white text-2xl font-bold backface-hidden">
-                            ❓
-                        </div>
-                        <div class="absolute inset-0 bg-white border-2 border-orange-400 rounded-xl flex items-center justify-center text-3xl text-orange-500 backface-hidden [transform:rotateY(180deg)]">
-                            <i class="fa-solid ${icon}"></i>
-                        </div>
-                    </div>
-                `;
-                card.addEventListener('click', () => handleCardClick(card));
-                board.appendChild(card);
-            });
-        }
-
-        function handleCardClick(card) {
-            if (!gameStarted) {
-                startTimer();
-                gameStarted = true;
-            }
-
-            const inner = card.querySelector('.card-inner');
-            if (flippedCards.length < 2 && !inner.classList.contains('flipped') && !inner.classList.contains('matched')) {
-                inner.classList.add('flipped');
-                flippedCards.push(inner);
-
-                if (flippedCards.length === 2) {
-                    checkMatch();
-                }
-            }
-        }
-
-        function checkMatch() {
-            const [card1, card2] = flippedCards;
-            const icon1 = card1.getAttribute('data-icon');
-            const icon2 = card2.getAttribute('data-icon');
-
-            if (icon1 === icon2) {
-                card1.classList.add('matched');
-                card2.classList.add('mat
+        function startNewGame() {
